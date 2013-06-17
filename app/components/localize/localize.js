@@ -11,10 +11,14 @@
 angular.module('localization', [])
     // localization service responsible for retrieving resource files from the server and
     // managing the translation dictionary
-    .factory('localize', ['$http', '$rootScope', '$window', '$filter', function ($http, $rootScope, $window, $filter) {
+    .factory('localize', ['$http', '$rootScope', '$window', '$filter','$location','$routeParams', 
+        function ($http, $rootScope, $window, $filter,$location,$routeParams) {
         var localize = {
             // use the $window service to get the language of the user's browser
             language:$window.navigator.userLanguage || $window.navigator.language,
+            oldLanguage: 'en',
+            fromPath: '/',
+            toPath: '',
             // array to hold the localized resource string entries
             dictionary:[],
             // flag to indicate if the service hs loaded the resource file
@@ -27,23 +31,42 @@ angular.module('localization', [])
                 // set the flag that the resource are loaded
                 localize.resourceFileLoaded = true;
                 // broadcast that the file has been loaded
+                console.log('service: fromPath : ' + localize.fromPath );
+                if (localize.fromPath === '/' ) {
+                    localize.toPath = '/'+localize.language;
+                } else {
+                    localize.toPath = localize.fromPath.replace('/'+localize.oldLanguage, '/'+localize.language)
+                }
+                
+                console.log("service: toPath " + localize.toPath);
+                if (localize.toPath != localize.fromPath){
+                    console.log("Service: Change Path");
+                    $location.path(localize.toPath).replace().reload(false);
+                }
                 $rootScope.$broadcast('localizeResourcesUpdates');
             },
 
             // allows setting of language on the fly
-            setLanguage: function(value) {
+            setLanguage: function(value,path) {
+                localize.oldLanguage = localize.language;
                 localize.language = value;
+                localize.fromPath = path;
+                console.log("setLanguage: localize.fromPath: " + localize.fromPath);
                 localize.initLocalizedResources();
             },
 
             // loads the language resource file from the server
             initLocalizedResources:function () {
+                console.log(localize.language);
+                //by default all en- should be en
+                localize.language = ( localize.language.indexOf("en-") > -1 ? 'en' : localize.language );
                 // build the url to retrieve the localized resource file
-                var url = 'i18n/resources-locale_' + localize.language + '.js';
+                var url = '/i18n/resources-locale_' + localize.language + '.js';
                 // request the resource file
+                localize.resourceFileLoaded = false;
                 $http({ method:"GET", url:url, cache:false }).success(localize.successCallback).error(function () {
                     // the request failed set the url to the default resource file
-                    var url = 'i18n/resources-locale_default.js';
+                    var url = '/i18n/resources-locale_default.js';
                     // request the default resource file
                     $http({ method:"GET", url:url, cache:false }).success(localize.successCallback);
                 });

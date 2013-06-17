@@ -8,7 +8,7 @@
 
 'use strict'
 
-function NewPersonController($scope, $location) {
+function NewPersonController($scope, $location, $routeParams) {
     $scope.person = {FirstName: '', LastName: '', Email: '', Bio: ''};
 
     $scope.savePerson = function() {

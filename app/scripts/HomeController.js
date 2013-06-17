@@ -8,5 +8,6 @@
 
 'use strict'
 
-function HomeController($scope) {
+function HomeController($scope,$routeParams,$location) {
+
 }
