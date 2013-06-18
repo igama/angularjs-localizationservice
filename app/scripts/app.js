@@ -13,30 +13,16 @@
 angular.module('localizeApp', ['localization', 'ui.bootstrap']).
     config(['$routeProvider','$locationProvider', function ($routeProvider,$locationProvider) {
     $routeProvider.
-        when('/', {templateUrl:'/partials/home.html', controller:HomeController}).
         when('/:lang', {templateUrl:'/partials/home.html', controller:HomeController}).
         when('/:lang/edit/:index', {templateUrl:'/partials/form.html', controller:EditPersonController}).
         when('/:lang/new', {templateUrl:'/partials/form.html', controller:NewPersonController}).
-        otherwise({redirectTo: '/404'});
+        otherwise({redirectTo: '/en'});
         $locationProvider.html5Mode(false);
 }]).run(function($rootScope, $routeParams,localize,$location){
 	$rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute) {
-
-		console.log("RPS1: routeParams Lang: " + $routeParams.lang);
-		console.log("RPS1: FromLang: " + localize.language);
-		console.log("RPS1: ToLang: " + $routeParams.lang);
-		console.log("RPS1: localize.fromPath: " + localize.fromPath);
-		console.log("RPS1: $location.path(): " + $location.path() );
-		console.log("RPS1: localize.resourceFileLoaded: " + localize.resourceFileLoaded);
-		if (localize.resourceFileLoaded && $routeParams.lang != localize.language && $routeParams.lang != undefined && localize.fromPath != $location.path() ) {
-    		console.log("RPS2: Change Languages: " + $routeParams.lang);
-    		console.log("RPS2: FromPath : " + $location.path());
-    		localize.setLanguage($routeParams.lang,$location.path());
-	        //$location.path('/'+newLanguage);
-    	}else{
-    		console.log("RTS: Nothing to do");
+		if (localize.resourceFileLoaded && $routeParams.lang != undefined && $routeParams.lang != localize.language ) {
+    		localize.setLanguage($routeParams.lang);
     	}
-
 
 	})
 });

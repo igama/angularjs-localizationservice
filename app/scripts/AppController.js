@@ -13,24 +13,15 @@ function AppController($route,$scope,$routeParams,localize,$location) {
     $scope.lang = 'en';
 
     $scope.setEnglishLanguage = function() {
-    		$scope.setLanguage('en');
+    		//$scope.setLanguage('en');
+            $location.path("/en");
     };
 
     $scope.setPigLatinLanguage = function() {
-    		$scope.setLanguage('es');
+    		//$scope.setLanguage('es');
+            $location.path("/es");
 
     };
 
-    $scope.setLanguage = function(newLanguage,path) {
-    	console.log('App: setLanguage : ' + newLanguage);
-    	console.log('App: current lang : ' + localize.language);
-    	if (newLanguage != localize.language) {
-    		localize.setLanguage(newLanguage,$location.path());
-    		$scope.lang = localize.language;
-    	}else {
-    		console.log("App : Nothing to do");
-    	}
-
-    };
 }
 

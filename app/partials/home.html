@@ -7,13 +7,13 @@
             <div class="span1" data-i18n="_NameHeader_"></div>
             <div class="span2" data-i18n="_EmailHeader_"></div>
             <div class="span3" data-i18n="_BioHeader_"></div>
-            <div class="span1"><a href="#/{{lang}}/new"><span class="icon icon-plus"></span></a></div>
+            <div class="span1"><a href="#/es/new"><span class="icon icon-plus"></span></a></div>
         </div>
         <div class="row-fluid" ng-repeat="person in People">
             <div class="span1" ng-bind="person.FirstName + ' ' + person.LastName"></div>
             <div class="span2" ng-bind="person.Email"></div>
             <div class="span3" ng-bind="person.Bio"></div>
-            <div class="span1"><a href="#/{{lang}}/edit/{{$index}}"><span class="icon icon-edit"></span></a></div>
+            <div class="span1"><a href="#/en/edit/{{$index}}"><span class="icon icon-edit"></span></a></div>
         </div>
     </div>
 </div>
