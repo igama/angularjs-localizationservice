@@ -11,8 +11,8 @@
 angular.module('localization', [])
     // localization service responsible for retrieving resource files from the server and
     // managing the translation dictionary
-    .factory('localize', ['$http', '$rootScope', '$window', '$filter','$location','$routeParams', 
-        function ($http, $rootScope, $window, $filter,$location,$routeParams) {
+    .factory('localize', ['$http', '$rootScope', '$window', '$filter', '$location', 
+        function ($http, $rootScope, $window, $filter, $location) {
         var localize = {
             // use the $window service to get the language of the user's browser
             language:$window.navigator.userLanguage || $window.navigator.language,
@@ -39,7 +39,6 @@ angular.module('localization', [])
 
             // loads the language resource file from the server
             initLocalizedResources:function () {
-                console.log("initLR" + localize.language);
                 //by default all en- should be en
                 localize.language = ( localize.language.indexOf("en-") > -1 ? 'en' : localize.language );
                 // build the url to retrieve the localized resource file
@@ -48,7 +47,8 @@ angular.module('localization', [])
                 localize.resourceFileLoaded = false;
                 $http({ method:"GET", url:url, cache:false }).success(localize.successCallback).error(function () {
                     // the request failed set the url to the default resource file
-                    var url = '/i18n/resources-locale_default.js';
+                    var url = '/i18n/resources-locale_en.js';
+                    localize.language = 'en';
                     // request the default resource file
                     $http({ method:"GET", url:url, cache:false }).success(localize.successCallback);
                 });
